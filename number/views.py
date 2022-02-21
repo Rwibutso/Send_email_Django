@@ -6,14 +6,11 @@ from django.http import request
 
 
 class NumberView(FormView):
-    template_name = 'number/number.html'
+    template_name = 'number.html'
     form_class = NumberForm
     success_url = reverse_lazy('number:success')
 
     def form_valid(self, form):
-        form.send()
-        return super().form_valid(form)
-
         if request.method =='POST':
            form = NumberForm(request.POST)
            if form.is_valid():
@@ -21,6 +18,8 @@ class NumberView(FormView):
                 return redirect('number:success')
         else:
             form = NumberForm()
+            form.send()
+            return super().form_valid(form)
 
 class NumberSuccessView(TemplateView):
     template_name = 'number/success.html'          
